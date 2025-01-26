@@ -2,16 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("registration-form"); // Selecting the form
   const feedbackDiv = document.getElementById("form-feedback"); // Selecting the feedback div
 
-  // Add event listener for form submission
-  form.addEventListener("submit", (event) => {
-    event.preventDefault(); // Prevent form submission
-
-    // Retrieve and trim input values
-    const username = document.getElementById("username").value.trim(); // Trimmed username
-    const email = document.getElementById("email").value.trim(); // Trimmed email
-    const password = document.getElementById("password").value.trim(); // Trimmed password
-
-    // Initialize validation variables
+  // Function to validate the form inputs
+  function validateForm(username, email, password) {
     let isValid = true; // Track overall validation status
     const messages = []; // Store validation error messages
 
@@ -33,7 +25,11 @@ document.addEventListener("DOMContentLoaded", () => {
       messages.push("Password must be at least 8 characters long."); // Add error message
     }
 
-    // Display feedback
+    return { isValid, messages }; // Return validation results
+  }
+
+  // Function to display feedback messages
+  function displayFeedback(isValid, messages) {
     feedbackDiv.style.display = "block"; // Make feedbackDiv visible
     if (isValid) {
       feedbackDiv.textContent = "Registration successful!"; // Success message
@@ -42,5 +38,21 @@ document.addEventListener("DOMContentLoaded", () => {
       feedbackDiv.innerHTML = messages.join("<br>"); // Join error messages
       feedbackDiv.style.color = "#dc3545"; // Red for errors
     }
+  }
+
+  // Add event listener for form submission
+  form.addEventListener("submit", (event) => {
+    event.preventDefault(); // Prevent form submission
+
+    // Retrieve and trim input values
+    const username = document.getElementById("username").value.trim(); // Trimmed username
+    const email = document.getElementById("email").value.trim(); // Trimmed email
+    const password = document.getElementById("password").value.trim(); // Trimmed password
+
+    // Validate the form
+    const { isValid, messages } = validateForm(username, email, password);
+
+    // Display feedback based on validation
+    displayFeedback(isValid, messages);
   });
 });
